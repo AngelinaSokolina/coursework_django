@@ -1,0 +1,63 @@
+{% extends 'mailing/base.html' %}
+
+{% block title %}Главная - Сервис рассылок{% endblock %}
+
+{% block content %}
+<div class="text-center mt-4">
+    <h2 class="display-6 fw-bold mb-4">
+        {% if user.is_authenticated %}
+            Статистика вашего пользования
+        {% else %}
+            Статистика сервиса
+        {% endif %}
+    </h2>
+
+    {% if user.is_authenticated %}
+        <!-- Статистика авторизованного пользователя -->
+        <div class="row justify-content-center align-items-center g-4">
+            <div class="col-md-3">
+                <div class="display-1 fw-bold text-dark">{{ user_mailings }}</div>
+                <div class="text-muted text-uppercase">Всего рассылок</div>
+            </div>
+            <div class="col-md-3">
+                <div class="display-1 fw-bold text-success">{{ active_mailings }}</div>
+                <div class="text-muted text-uppercase">Активных рассылок</div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-3">
+                <div class="display-1 fw-bold text-primary">{{ user_clients }}</div>
+                <div class="text-muted text-uppercase">Всего клиентов</div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-5 pt-3 border-top">
+            <div class="col-md-4">
+                <div class="display-1 fw-bold text-secondary">{{ user_attempts }}</div>
+                <div class="text-muted text-uppercase">Ваши попытки</div>
+            </div>
+            <div class="col-md-4">
+                <div class="display-1 fw-bold text-success">{{ user_success }}</div>
+                <div class="text-muted text-uppercase">Успешных отправок</div>
+            </div>
+        </div>
+    {% else %}
+        <!-- Статистика для неавторизованных -->
+        <div class="row justify-content-center align-items-center g-4">
+            <div class="col-md-3">
+                <div class="display-1 fw-bold text-dark">{{ total_mailings }}</div>
+                <div class="text-muted text-uppercase">Всего рассылок</div>
+            </div>
+            <div class="col-md-3">
+                <div class="display-1 fw-bold text-success">{{ active_mailings }}</div>
+                <div class="text-muted text-uppercase">Активных рассылок</div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-3">
+                <div class="display-1 fw-bold text-primary">{{ total_clients }}</div>
+                <div class="text-muted text-uppercase">Всего клиентов</div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

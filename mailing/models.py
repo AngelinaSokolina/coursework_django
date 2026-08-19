@@ -5,6 +5,13 @@ class Client(models.Model):
     email = models.EmailField(unique=True, verbose_name="Email")
     full_name = models.CharField(max_length=150, verbose_name="Ф. И. О.")
     comment = models.TextField(blank=True, verbose_name="Комментарий")
+    owner = models.ForeignKey(
+        'users.User',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        verbose_name="Владелец"
+    )
 
     def __str__(self):
         return self.email
@@ -49,6 +56,13 @@ class Mailing(models.Model):
     recipients = models.ManyToManyField(
         Client,
         verbose_name="Получатели"
+    )
+    owner = models.ForeignKey(
+        'users.User',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        verbose_name="Владелец"
     )
 
     def update_status(self):

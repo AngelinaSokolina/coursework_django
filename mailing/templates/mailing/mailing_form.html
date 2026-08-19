@@ -1,0 +1,58 @@
+{% extends 'mailing/base.html' %}
+
+{% block title %}{% if object %}Редактировать рассылку{% else %}Создать рассылку{% endif %}{% endblock %}
+
+{% block content %}
+<div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+    <h2 class="fw-bold mb-4">{% if object %}Редактировать рассылку{% else %}Создать рассылку{% endif %}</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                {{ form.start_date.label_tag }}
+                {{ form.start_date }}
+            </div>
+            <div class="col-md-6 mb-3">
+                {{ form.start_time.label_tag }}
+                {{ form.start_time }}
+                <small class="text-muted">{{ form.start_time.help_text }}</small>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                {{ form.end_date.label_tag }}
+                {{ form.end_date }}
+            </div>
+            <div class="col-md-6 mb-3">
+                {{ form.end_time.label_tag }}
+                {{ form.end_time }}
+                <small class="text-muted">{{ form.end_time.help_text }}</small>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            {{ form.message.label_tag }}
+            {{ form.message }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.recipients.label_tag }}
+            {{ form.recipients }}
+        </div>
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger mt-3">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <div class="d-flex gap-2 mt-3 pt-3 border-top">
+            <button type="submit" class="btn btn-success">Сохранить</button>
+            <a href="{% url 'mailing:mailing_list' %}" class="btn btn-outline-secondary">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
