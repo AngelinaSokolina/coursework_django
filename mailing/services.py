@@ -5,6 +5,7 @@ from .models import MailingAttempt
 
 def send_mailing(mailing):
     recipients = mailing.recipients.all()
+    mailing.update_status()
     for client in recipients:
         try:
             send_mail(

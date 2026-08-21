@@ -31,7 +31,6 @@ class UserRegisterForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Убираем стандартные подсказки Django
         self.fields['password1'].help_text = 'Пароль должен содержать минимум 8 символов, включая буквы и цифры.'
         self.fields['password2'].help_text = None
 
@@ -55,3 +54,9 @@ class UserLoginForm(AuthenticationForm):
         label='Пароль',
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Пароль'})
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Убираем подсказки для формы входа
+        self.fields['username'].help_text = None
+        self.fields['password'].help_text = None

@@ -24,8 +24,11 @@
                 <td>{{ client.full_name }}</td>
                 <td class="text-end">
                     <a href="{% url 'mailing:client_detail' client.pk %}" class="btn btn-sm btn-outline-primary">Просмотр</a>
-                    <a href="{% url 'mailing:client_update' client.pk %}" class="btn btn-sm btn-outline-secondary">Редактировать</a>
-                    <a href="{% url 'mailing:client_delete' client.pk %}" class="btn btn-sm btn-outline-danger">Удалить</a>
+
+                    {% if not user.groups.all.0.name == 'Менеджер' and user == client.owner %}
+                        <a href="{% url 'mailing:client_update' client.pk %}" class="btn btn-sm btn-outline-secondary">Редактировать</a>
+                        <a href="{% url 'mailing:client_delete' client.pk %}" class="btn btn-sm btn-outline-danger">Удалить</a>
+                    {% endif %}
                 </td>
             </tr>
             {% empty %}

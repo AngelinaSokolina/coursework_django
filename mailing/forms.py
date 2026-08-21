@@ -1,6 +1,6 @@
 from django import forms
 from django.utils import timezone
-from .models import Mailing
+from .models import Mailing, Client, Message
 
 
 class MailingForm(forms.ModelForm):
@@ -29,10 +29,16 @@ class MailingForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
 
+        if user:
+            # Фильтруем получателей
+            self.fields['recipients'].queryset = Client.objects.filter(owner=user)
+            # 👇 ДОБАВЬ ФИЛЬТРАЦИЮ СООБЩЕНИЙ
+            self.fields['message'].queryset = Message.objects.filter(owner=user)
+
         if self.instance and self.instance.pk:
-            # Заполняем поля при редактировании
             self.fields['start_date'].initial = self.instance.start_time.date()
             self.fields['start_time'].initial = self.instance.start_time.time()
             self.fields['end_date'].initial = self.instance.end_time.date()

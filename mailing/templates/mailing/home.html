@@ -13,7 +13,7 @@
     </h2>
 
     {% if user.is_authenticated %}
-        <!-- Статистика авторизованного пользователя -->
+        <!-- Статистика авторизованного пользователя (только свои данные) -->
         <div class="row justify-content-center align-items-center g-4">
             <div class="col-md-3">
                 <div class="display-1 fw-bold text-dark">{{ user_mailings }}</div>
@@ -41,7 +41,7 @@
             </div>
         </div>
     {% else %}
-        <!-- Статистика для неавторизованных -->
+        <!-- Статистика для неавторизованных (общая) -->
         <div class="row justify-content-center align-items-center g-4">
             <div class="col-md-3">
                 <div class="display-1 fw-bold text-dark">{{ total_mailings }}</div>
