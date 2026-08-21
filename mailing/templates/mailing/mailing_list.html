@@ -9,7 +9,7 @@
 </div>
 
 <div class="table-responsive">
-    <table class="table table-hover align-middle bg-white rounded-4 shadow-sm overflow-hidden">
+    <table class="table align-middle bg-white rounded-4 shadow-sm overflow-hidden">
         <thead class="table-light">
             <tr>
                 <th>ID</th>
@@ -34,8 +34,11 @@
                 <td>{{ mailing.message.subject }}</td>
                 <td class="text-end">
                     <a href="{% url 'mailing:mailing_detail' mailing.pk %}" class="btn btn-sm btn-outline-primary">Просмотр</a>
-                    <a href="{% url 'mailing:mailing_update' mailing.pk %}" class="btn btn-sm btn-outline-secondary">Редактировать</a>
-                    <a href="{% url 'mailing:mailing_delete' mailing.pk %}" class="btn btn-sm btn-outline-danger">Удалить</a>
+
+                    {% if not user.groups.all.0.name == 'Менеджер' and user == mailing.owner %}
+                        <a href="{% url 'mailing:mailing_update' mailing.pk %}" class="btn btn-sm btn-outline-secondary">Редактировать</a>
+                        <a href="{% url 'mailing:mailing_delete' mailing.pk %}" class="btn btn-sm btn-outline-danger">Удалить</a>
+                    {% endif %}
                 </td>
             </tr>
             {% empty %}

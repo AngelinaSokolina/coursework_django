@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+from django.conf import settings
 
 
 class Client(models.Model):
@@ -23,7 +25,16 @@ class Client(models.Model):
 
 class Message(models.Model):
     subject = models.CharField(max_length=200, verbose_name="Тема письма")
-    body = models.TextField(verbose_name="Тело письма")
+    body = models.TextField(verbose_name="Текст письма")
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='messages',
+        null=True,  # временно разрешаем null для старых записей
+        blank=True
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.subject
@@ -66,10 +77,15 @@ class Mailing(models.Model):
     )
 
     def update_status(self):
-        """Обновляет статус рассылки в зависимости от текущего времени"""
-        from django.utils import timezone
         now = timezone.now()
 
+        # Если нет попыток → статус "Создана"
+        if not self.mailingattempt_set.exists():
+            self.status = 'created'
+            self.save()
+            return
+
+        # Если есть попытки — проверяем время
         if now < self.start_time:
             new_status = 'created'
         elif self.start_time <= now <= self.end_time:
@@ -80,7 +96,6 @@ class Mailing(models.Model):
         if self.status != new_status:
             self.status = new_status
             self.save()
-
     def __str__(self):
         return f"Рассылка от {self.start_time}"
 
